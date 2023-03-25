@@ -10,7 +10,10 @@ export class CharactersService {
   async characters(token: string, userId: string): Promise<Character[]> {
     const chars = await this.prisma.character.findMany();
 
-    if (!this.jwtService.verify(token, { secret: process.env.JWT_SECRET })) {
+    if (
+      token &&
+      !this.jwtService.verify(token, { secret: process.env.JWT_SECRET })
+    ) {
       userId = '';
     }
 
