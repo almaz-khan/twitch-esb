@@ -58,7 +58,6 @@ export class EventsGateway {
     const updatedChar = await this.prisma.character.update({
       where: { id: char.id },
       data: {
-        votes: char.votes + 1,
         voters: { connect: { userId: addedUser.userId } },
       },
     });

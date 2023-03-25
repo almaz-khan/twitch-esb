@@ -8,21 +8,26 @@ export class CharactersService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
   async characters(token: string, userId: string): Promise<Character[]> {
-    const chars = await this.prisma.character.findMany();
+    const chars = await this.prisma.character.findMany({
+      include: { voters: true },
+    });
 
     if (
       token &&
-      !this.jwtService.verify(token, { secret: process.env.JWT_SECRET })
+      !this.jwtService.verify(token, {
+        secret: new Buffer(process.env.JWT_SECRET, 'base64'),
+      })
     ) {
       userId = '';
     }
 
-    console.log(userId);
-
     return chars.map((char) => {
+      const { voters, ...rest } = char;
+
       return {
-        ...char,
-        // isMyVote: char.voters.includes(userId),
+        ...rest,
+        votes: voters.length,
+        isMyVote: voters.some((user) => user.userId === userId),
       };
     });
   }

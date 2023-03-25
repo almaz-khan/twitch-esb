@@ -15,7 +15,6 @@ model Character {
   id    Int    @id @default(autoincrement())
   name  String @unique(sort: Desc) @db.VarChar(255)
   img   String @db.VarChar(255)
-  votes Int    @db.Int
   voters  User[]
 }
 
