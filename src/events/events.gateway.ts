@@ -31,7 +31,9 @@ export class EventsGateway {
       return;
     }
 
-    if (!this.jwtService.verify(token, { secret: process.env.JWT_SECRET })) {
+    const secret = new Buffer(process.env.JWT_SECRET, 'base64');
+
+    if (!this.jwtService.verify(token, { secret: secret })) {
       return;
     }
     const user = await this.prisma.user.findUnique({
