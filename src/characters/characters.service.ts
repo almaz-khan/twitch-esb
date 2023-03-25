@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { Character } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class CharactersService {
-  getCharacters(): string {
-    return 'Characters';
+  constructor(private prisma: PrismaService) {}
+
+  async characters(): Promise<Character[]> {
+    return this.prisma.character.findMany();
   }
 }

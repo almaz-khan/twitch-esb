@@ -5,7 +5,7 @@ import { CharactersService } from './characters.service';
 export class CharactersController {
   constructor(private charactersService: CharactersService) {}
   @Get('all-characters')
-  getCharacters(): string {
-    return this.charactersService.getCharacters();
+  async getCharacters() {
+    return await this.charactersService.characters();
   }
 }
