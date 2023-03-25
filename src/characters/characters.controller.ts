@@ -1,6 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { Character } from '@prisma/client';
-import { EventsGateway } from 'src/events/events.gateway';
 import { CharactersService } from './characters.service';
 
 @Controller('characters')
@@ -8,7 +7,10 @@ export class CharactersController {
   constructor(private charactersService: CharactersService) {}
 
   @Get('all-characters')
-  async getCharacters() {
-    return await this.charactersService.characters();
+  async getCharacters(@Req() request): Promise<Character[]> {
+    const userId = request.headers['user-id'];
+    const token = request.headers['token'];
+
+    return await this.charactersService.characters(token, userId);
   }
 }
